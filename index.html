@@ -3,473 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slendro AI Studio - AI Video, Image & Voice Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>AI Studio Pro - Create with AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #8B5CF6;
-            --primary-dark: #7C3AED;
-            --secondary: #06B6D4;
-            --accent: #F472B6;
-            --bg-dark: #0F0F1A;
-            --bg-card: #1A1A2E;
-            --bg-hover: #252540;
-            --text-primary: #FFFFFF;
-            --text-secondary: #A0A0B0;
-            --border: #2D2D44;
-            --success: #10B981;
-            --warning: #F59E0B;
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --primary-dark: #4F46E5;
+            --secondary: #EC4899;
+            --accent: #14B8A6;
+            --bg-primary: #09090B;
+            --bg-secondary: #18181B;
+            --bg-tertiary: #27272A;
+            --bg-card: #1C1C1E;
+            --text-primary: #FAFAFA;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --border: #27272A;
+            --border-light: #3F3F46;
+            --success: #22C55E;
+            --warning: #EAB308;
             --error: #EF4444;
+            --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+            --gradient-subtle: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Background Effects */
-        .bg-gradient {
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(244, 114, 182, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
+        .sidebar-header {
+            padding: 0 12px 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
         }
 
-        /* Header */
-        header {
-            text-align: center;
-            padding: 30px 20px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
+        .logo { display: flex; align-items: center; gap: 12px; }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #6366F1, #8B5CF6, #06B6D4, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* System Status */
-        .system-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--success);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 15px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            padding: 20px;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .nav-tab {
-            padding: 12px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-
-        .nav-tab:hover {
-            border-color: var(--primary);
-            color: var(--text-primary);
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-color: transparent;
-            color: white;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
-        }
-
-        .nav-tab .icon {
-            font-size: 1.2rem;
-        }
-
-        /* Main Card */
-        .main-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 35px;
-            margin-bottom: 30px;
-            animation: fadeInUp 0.8s ease 0.3s both;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-title .icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        /* Tool Sections */
-        .tool-section {
-            display: none;
-        }
-
-        .tool-section.active {
-            display: block;
-        }
-
-        /* Upload Section */
-        .upload-section {
-            margin-bottom: 30px;
-        }
-
-        .upload-zone {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 40px 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(139, 92, 246, 0.03);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-zone:hover, .upload-zone.dragover {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.08);
-            transform: scale(1.01);
-        }
-
-        .upload-zone.has-image {
-            padding: 20px;
-        }
-
-        .upload-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-            opacity: 0.8;
-        }
-
-        .upload-text h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-
-        .upload-text p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .upload-formats {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .format-badge {
-            background: var(--bg-hover);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .preview-container {
-            display: none;
-        }
-
-        .upload-zone.has-image .preview-container {
-            display: block;
-        }
-
-        .preview-container img {
-            max-width: 100%;
-            max-height: 350px;
-            border-radius: 12px;
-            object-fit: contain;
-        }
-
-        .remove-image {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 36px;
-            height: 36px;
-            background: rgba(239, 68, 68, 0.9);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .remove-image:hover {
-            background: var(--error);
-            transform: scale(1.1);
-        }
-
-        #fileInput, #videoFileInput {
-            display: none;
-        }
-
-        /* Text Input */
-        .text-input-container {
-            margin-bottom: 30px;
-        }
-
-        .text-input-container textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 20px;
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            resize: vertical;
-            transition: border-color 0.3s;
-        }
-
-        .text-input-container textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .text-input-container textarea::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .char-count {
-            text-align: right;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
-
-        /* Prompt Templates */
-        .prompt-templates {
-            margin-bottom: 20px;
-        }
-
-        .prompt-templates h4 {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-
-        .template-btns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .template-btn {
-            padding: 8px 16px;
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .template-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Style Options */
-        .style-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .style-card {
-            background: var(--bg-hover);
-            border: 2px solid transparent;
-            border-radius: 16px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .style-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        .style-card.selected {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.15);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
-        }
-
-        .style-card .style-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .style-card h4 {
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .style-card p {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-        }
-
-        /* Model Selection */
-        .model-selection {
-            margin-bottom: 30px;
-        }
-
-        .model-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .model-card {
-            background: var(--bg-hover);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .model-card:hover {
-            border-color: var(--primary);
-        }
-
-        .model-card.selected {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.15);
-        }
-
-        .model-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -477,264 +73,350 @@
             font-size: 20px;
         }
 
-        .model-info h4 {
-            font-size: 0.95rem;
+        .logo-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-text span { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+
+        .nav-section { margin-bottom: 24px; }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 12px;
+            margin-bottom: 8px;
         }
 
-        .model-info p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* Aspect Ratio */
-        .aspect-ratio-options {
+        .nav-item {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .aspect-btn {
-            padding: 10px 20px;
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
             border-radius: 10px;
-            color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
         }
 
-        .aspect-btn:hover {
-            border-color: var(--primary);
-            color: var(--text-primary);
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--gradient-primary); color: white; }
+
+        .nav-item .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: var(--bg-tertiary);
         }
 
-        .aspect-btn.selected {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
+        .nav-item.active .icon { background: rgba(255,255,255,0.2); }
 
-        /* Settings Grid */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+        .nav-item .text { flex: 1; }
+        .nav-item .text h3 { font-size: 14px; font-weight: 600; }
+        .nav-item .text p { font-size: 11px; opacity: 0.7; }
 
-        .setting-item {
-            background: var(--bg-hover);
-            padding: 18px;
+        .api-status-card {
+            background: var(--bg-tertiary);
             border-radius: 12px;
+            padding: 16px;
+            margin-top: auto;
         }
 
-        .setting-label {
-            font-size: 0.85rem;
+        .api-status-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .status-dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .status-dot.offline { background: var(--error); }
+
+        .api-status-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .api-status-card p { font-size: 11px; color: var(--text-muted); }
+
+        .api-provider-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 12px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .connect-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 32px 48px;
+            max-width: 1200px;
+        }
+
+        .content-header { margin-bottom: 32px; }
+        .content-header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+        .content-header p { color: var(--text-secondary); font-size: 15px; }
+
+        .creator-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .input-section { margin-bottom: 24px; }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--text-secondary);
             margin-bottom: 8px;
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
         }
 
-        .setting-value {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        input[type="range"] {
+        .prompt-input {
             width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            -webkit-appearance: none;
+            min-height: 120px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.2s;
         }
 
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
+        .prompt-input:focus { outline: none; border-color: var(--primary); }
+        .prompt-input::placeholder { color: var(--text-muted); }
+
+        .input-hint { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
+        .templates-section { margin-bottom: 24px; }
+
+        .templates-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+        .template-chip {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .template-chip:hover { border-color: var(--primary); color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--gradient-subtle);
+            margin-bottom: 24px;
+        }
+
+        .upload-zone:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .upload-zone.dragover { border-color: var(--primary); background: rgba(99, 102, 241, 0.15); }
+        .upload-zone.has-image { padding: 20px; border-style: solid; }
+
+        .upload-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.8; }
+        .upload-zone h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .upload-zone p { font-size: 13px; color: var(--text-muted); }
+
+        .upload-formats { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+
+        .format-badge { padding: 4px 12px; background: var(--bg-tertiary); border-radius: 12px; font-size: 11px; color: var(--text-muted); }
+
+        .preview-container { display: none; position: relative; }
+        .upload-zone.has-image .upload-content { display: none; }
+        .upload-zone.has-image .preview-container { display: block; }
+        .preview-container img { max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain; }
+
+        .remove-image {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            background: rgba(239, 68, 68, 0.9);
+            border: none;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #fileInput { display: none; }
+
+        .options-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+
+        .option-card {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .option-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+        .option-card.selected { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .option-card .icon { font-size: 28px; margin-bottom: 8px; }
+        .option-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .option-card p { font-size: 11px; color: var(--text-muted); }
+
+        .settings-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+
+        .setting-item { background: var(--bg-tertiary); border-radius: 12px; padding: 16px; }
+
+        .setting-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .setting-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+        .setting-value { font-size: 12px; font-weight: 600; color: var(--primary); }
+
+        .setting-slider {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .setting-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
             cursor: pointer;
         }
 
-        /* Generate Button */
         .generate-btn {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 18px 32px;
+            background: var(--gradient-primary);
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .generate-btn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .generate-btn .sparkle {
-            animation: sparkle 1.5s infinite;
-        }
+        .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4); }
+        .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .generate-btn .sparkle { font-size: 20px; animation: sparkle 2s infinite; }
 
         @keyframes sparkle {
             0%, 100% { transform: scale(1) rotate(0deg); }
             50% { transform: scale(1.2) rotate(180deg); }
         }
 
-        /* Voice Options */
-        .voice-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .voice-card {
-            background: var(--bg-hover);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .voice-card:hover {
-            border-color: var(--primary);
-        }
-
-        .voice-card.selected {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.15);
-        }
-
-        .voice-card .voice-icon {
-            font-size: 30px;
-            margin-bottom: 8px;
-        }
-
-        .voice-card h4 {
-            font-size: 0.9rem;
-        }
-
-        .voice-card p {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-        }
-
-        /* API Settings Panel */
-        .api-settings {
-            background: var(--bg-hover);
+        .result-section {
+            display: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
+            padding: 24px;
+            margin-top: 24px;
+            animation: fadeIn 0.5s ease;
         }
 
-        .api-settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        .result-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .api-settings-header h4 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-        }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .result-header h3 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 
-        .api-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-        }
+        .result-badge { padding: 6px 12px; background: var(--success); border-radius: 20px; font-size: 11px; font-weight: 600; }
 
-        .api-status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .api-status-dot.online { background: var(--success); }
-        .api-status-dot.offline { background: var(--error); }
-        .api-status-dot.loading { background: var(--warning); animation: blink 1s infinite; }
-
-        .api-config-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .api-config-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .api-config-item label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .api-config-item select,
-        .api-config-item input {
-            padding: 10px 12px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .api-config-item select:focus,
-        .api-config-item input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .connect-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+        .result-preview {
             width: 100%;
+            aspect-ratio: 16/9;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
 
-        .connect-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        .result-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .result-preview video { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .action-buttons { display: flex; gap: 12px; }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .connect-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .action-btn.primary { background: var(--gradient-primary); color: white; }
+        .action-btn.secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); }
+        .action-btn:hover { transform: translateY(-2px); }
 
-        /* Processing Overlay */
         .processing-overlay {
             display: none;
             position: fixed;
@@ -742,226 +424,58 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 15, 26, 0.95);
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
 
-        .processing-overlay.active {
-            display: flex;
-        }
+        .processing-overlay.active { display: flex; }
 
-        .processing-content {
-            text-align: center;
-        }
+        .processing-animation { width: 120px; height: 120px; position: relative; margin-bottom: 32px; }
 
-        .processing-animation {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-
-        .processing-circle {
+        .processing-ring {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 4px solid transparent;
+            border: 3px solid transparent;
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1.5s linear infinite;
         }
 
-        .processing-circle:nth-child(2) {
-            width: 80%;
-            height: 80%;
-            top: 10%;
-            left: 10%;
-            border-top-color: var(--secondary);
-            animation-duration: 0.8s;
-            animation-direction: reverse;
-        }
+        .processing-ring:nth-child(1) { width: 100%; height: 100%; }
+        .processing-ring:nth-child(2) { width: 75%; height: 75%; top: 12.5%; left: 12.5%; border-top-color: var(--secondary); animation-duration: 1s; animation-direction: reverse; }
+        .processing-ring:nth-child(3) { width: 50%; height: 50%; top: 25%; left: 25%; border-top-color: var(--accent); animation-duration: 0.75s; }
 
-        .processing-circle:nth-child(3) {
-            width: 60%;
-            height: 60%;
-            top: 20%;
-            left: 20%;
-            border-top-color: var(--accent);
-            animation-duration: 0.6s;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .processing-text { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .processing-status { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
 
-        .processing-text {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .processing-status {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .progress-bar {
-            width: 300px;
-            height: 8px;
-            background: var(--bg-hover);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 0 auto;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
+        .progress-bar { width: 300px; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gradient-primary); border-radius: 3px; transition: width 0.3s ease; }
 
         .cancel-btn {
-            margin-top: 20px;
-            padding: 10px 30px;
+            margin-top: 24px;
+            padding: 10px 24px;
             background: transparent;
             border: 1px solid var(--border);
             border-radius: 8px;
             color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 13px;
         }
 
-        .cancel-btn:hover {
-            border-color: var(--error);
-            color: var(--error);
-        }
+        .cancel-btn:hover { border-color: var(--error); color: var(--error); }
 
-        /* Result Section */
-        .result-section {
-            display: none;
-            margin-top: 30px;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .result-section.active {
-            display: block;
-        }
-
-        .result-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 30px;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .result-header h3 {
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .result-badge {
-            background: var(--success);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .result-preview {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .result-preview img, .result-preview video {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            flex: 1;
-            min-width: 140px;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .action-btn.primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .action-btn.secondary {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        /* Toast */
         .toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--bg-card);
+            bottom: 32px;
+            right: 32px;
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
-            padding: 15px 25px;
+            padding: 16px 24px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -969,928 +483,539 @@
             transform: translateX(150%);
             transition: transform 0.4s ease;
             z-index: 2000;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .toast.show {
-            transform: translateX(0);
-        }
-
+        .toast.show { transform: translateX(0); }
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--error); }
 
-        /* Global Nodes Status */
-        .nodes-status {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 20px 0;
+        .tool-section { display: none; }
+        .tool-section.active { display: block; }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 80px; padding: 16px 8px; }
+            .sidebar-header { padding: 0 4px 16px; }
+            .logo-text, .nav-item .text, .nav-label, .api-status-card p { display: none; }
+            .logo-icon { width: 48px; height: 48px; margin: 0 auto; }
+            .nav-item { justify-content: center; padding: 12px; }
+            .nav-item .icon { width: 40px; height: 40px; }
+            .main-content { margin-left: 80px; padding: 24px; }
+            .options-grid, .settings-row { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .node-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-card);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        .node-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .node-dot.online { background: var(--success); }
-        .node-dot.busy { background: var(--warning); }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .main-card { padding: 20px; }
-            .nav-tab { padding: 10px 16px; font-size: 0.85rem; }
-            .style-options { grid-template-columns: repeat(2, 1fr); }
-            .action-buttons { flex-direction: column; }
-            .action-btn { min-width: 100%; }
-        }
-
-        /* Script Generator */
-        .script-section {
-            background: var(--bg-hover);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .script-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .script-header h4 {
-            font-size: 1rem;
-        }
-
-        .script-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .script-btn {
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .script-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .script-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        /* Kids Cartoons Section */
-        .cartoon-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .cartoon-card {
-            background: var(--bg-hover);
-            border: 2px solid transparent;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .cartoon-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-        }
-
-        .cartoon-card.selected {
-            border-color: var(--accent);
-            background: rgba(244, 114, 182, 0.15);
-        }
-
-        .cartoon-card .cartoon-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        /* Stock Video Section */
-        .stock-categories {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .category-btn {
-            padding: 10px 20px;
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-        }
-
-        .category-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .category-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 16px; }
+            .options-grid, .settings-row { grid-template-columns: 1fr; }
+            .content-header h1 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-gradient"></div>
-
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="logo">
-                <div class="logo-icon">🎬</div>
-            </div>
-            <h1>Slendro AI Studio</h1>
-            <p class="subtitle">AI Video, Image, Voice & Music Generator - Powered by Slendro-Chip v1.2</p>
-            <div class="system-status">
-                <span class="status-dot"></span>
-                <span>SLENDRO-CHIP v1.2 ONLINE</span>
-            </div>
-            <div class="nodes-status">
-                <div class="node-item"><span class="node-dot online"></span> Tokyo</div>
-                <div class="node-item"><span class="node-dot online"></span> Singapore</div>
-                <div class="node-item"><span class="node-dot busy"></span> London</div>
-            </div>
-        </header>
-
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" data-tab="video">
-                <span class="icon">🎬</span> AI Video
-            </button>
-            <button class="nav-tab" data-tab="image">
-                <span class="icon">🖼️</span> AI Image
-            </button>
-            <button class="nav-tab" data-tab="voice">
-                <span class="icon">🎙️</span> AI Voice
-            </button>
-            <button class="nav-tab" data-tab="music">
-                <span class="icon">🎵</span> AI Music
-            </button>
-            <button class="nav-tab" data-tab=" shorts">
-                <span class="icon">📱</span> Auto Shorts
-            </button>
-            <button class="nav-tab" data-tab="cartoon">
-                <span class="icon">👶</span> Kids Cartoon
-            </button>
-        </div>
-
-        <!-- Main Card -->
-        <div class="main-card">
-            
-            <!-- ==================== VIDEO TAB ==================== -->
-            <div class="tool-section active" id="video-section">
-                <div class="section-title">
-                    <span class="icon">🎬</span>
-                    AI Video Generator
-                </div>
-
-                <!-- API Settings Panel -->
-                <div class="api-settings">
-                    <div class="api-settings-header">
-                        <h4>🔌 AI API Configuration</h4>
-                        <div class="api-status" id="apiStatus">
-                            <span class="api-status-dot offline" id="apiStatusDot"></span>
-                            <span id="apiStatusText">Disconnected</span>
-                        </div>
-                    </div>
-                    <div class="api-config-grid">
-                        <div class="api-config-item">
-                            <label>Provider</label>
-                            <select id="aiProvider">
-                                <option value="ollama">Ollama (Local)</option>
-                                <option value="huggingface">Hugging Face (Free)</option>
-                                <option value="demo">Demo Mode</option>
-                            </select>
-                        </div>
-                        <div class="api-config-item">
-                            <label>Ollama URL</label>
-                            <input type="text" id="ollamaUrl" value="http://localhost:11434" placeholder="http://localhost:11434">
-                        </div>
-                        <div class="api-config-item">
-                            <label>Model</label>
-                            <select id="aiModel">
-                                <option value="llava">LLaVA (Vision)</option>
-                                <option value="llama3.2">Llama 3.2</option>
-                                <option value="mistral">Mistral</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; align-items: flex-end;">
-                            <button class="connect-btn" id="connectApiBtn" onclick="connectToAI()">
-                                🔗 Connect
-                            </button>
-                        </div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">✨</div>
+                    <div class="logo-text">
+                        <h1>AI Studio</h1>
+                        <span>Professional Edition</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Model Selection -->
-                <div class="model-selection">
-                    <div class="model-grid">
-                        <div class="model-card selected" data-model="slendro-v1">
-                            <div class="model-icon">🚀</div>
-                            <div class="model-info">
-                                <h4>Slendro Video</h4>
-                                <p>Model default Slendro</p>
-                            </div>
-                        </div>
-                        <div class="model-card" data-model="kling">
-                            <div class="model-icon">⚡</div>
-                            <div class="model-info">
-                                <h4>Kling AI</h4>
-                                <p>High quality cinematic</p>
-                            </div>
-                        </div>
-                        <div class="model-card" data-model="runway">
-                            <div class="model-icon">✈️</div>
-                            <div class="model-info">
-                                <h4>Runway</h4>
-                                <p>Creative styles</p>
-                            </div>
-                        </div>
+            <nav class="nav-section">
+                <div class="nav-label">Create</div>
+                <div class="nav-item active" data-tab="image">
+                    <div class="icon">🖼️</div>
+                    <div class="text">
+                        <h3>Image Generator</h3>
+                        <p>Create stunning images</p>
                     </div>
                 </div>
-
-                <!-- Upload Section -->
-                <div class="upload-section">
-                    <div class="section-title" style="font-size: 1rem; margin-bottom: 15px;">
-                        <span class="icon" style="width: 30px; height: 30px; font-size: 14px;">📤</span>
-                        Upload Gambar (Image to Video)
+                <div class="nav-item" data-tab="video">
+                    <div class="icon">🎬</div>
+                    <div class="text">
+                        <h3>Video Generator</h3>
+                        <p>Animate your visions</p>
                     </div>
+                </div>
+                <div class="nav-item" data-tab="voice">
+                    <div class="icon">🎙️</div>
+                    <div class="text">
+                        <h3>Voice Clone</h3>
+                        <p>Text to speech</p>
+                    </div>
+                </div>
+                <div class="nav-item" data-tab="music">
+                    <div class="icon">🎵</div>
+                    <div class="text">
+                        <h3>Music AI</h3>
+                        <p>Generate music</p>
+                    </div>
+                </div>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Tools</div>
+                <div class="nav-item" data-tab="shorts">
+                    <div class="icon">📱</div>
+                    <div class="text">
+                        <h3>Shorts</h3>
+                        <p>Viral content</p>
+                    </div>
+                </div>
+                <div class="nav-item" data-tab="cartoon">
+                    <div class="icon">🎨</div>
+                    <div class="text">
+                        <h3>Cartoon</h3>
+                        <p>3D animations</p>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="api-status-card">
+                <div class="api-status-header">
+                    <span class="status-dot" id="apiStatusDot"></span>
+                    <span id="apiStatusText">API Status</span>
+                </div>
+                <h4>AI Provider</h4>
+                <p id="apiProviderName">Not connected</p>
+                <select class="api-provider-select" id="aiProvider">
+                    <option value="ollama">Ollama (Local)</option>
+                    <option value="huggingface">Hugging Face</option>
+                    <option value="demo" selected>Demo Mode</option>
+                </select>
+                <input type="text" id="ollamaUrl" value="http://localhost:11434" placeholder="Ollama URL" 
+                    style="width:100%;padding:10px;margin-top:8px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:12px;display:none;">
+                <button class="connect-btn" id="connectApiBtn" onclick="connectToAI()">Connect</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 id="pageTitle">Image Generator</h1>
+                <p id="pageDescription">Create stunning AI-powered images from text descriptions</p>
+            </div>
+
+            <!-- ==================== IMAGE SECTION ==================== -->
+            <div class="tool-section active" id="image-section">
+                <div class="creator-card">
+                    <div class="input-section">
+                        <label class="input-label"><span>✨</span> Describe your image</label>
+                        <textarea class="prompt-input" id="imagePrompt" 
+                            placeholder="A majestic lion in the savanna at golden hour, cinematic lighting, 4K quality, dramatic clouds..."></textarea>
+                        <p class="input-hint">Be descriptive for better results • Include style, lighting, and mood</p>
+                    </div>
+
+                    <div class="templates-section">
+                        <label class="input-label">Quick Templates</label>
+                        <div class="templates-grid">
+                            <button class="template-chip" data-prompt="Portrait of a woman, soft lighting, professional photography, 8K">👤 Portrait</button>
+                            <button class="template-chip" data-prompt="Fantasy castle on mountain top, sunset, epic landscape, volumetric lighting">🏰 Fantasy</button>
+                            <button class="template-chip" data-prompt="Minimalist product photography, white background, commercial, high detail">📦 Product</button>
+                            <button class="template-chip" data-prompt="Abstract geometric art, vibrant colors, modern design, 4K">🎨 Abstract</button>
+                            <button class="template-chip" data-prompt="Anime girl with blue hair, cherry blossoms, soft lighting, detailed">🎭 Anime</button>
+                            <button class="template-chip" data-prompt="Oil painting style, landscape with mountains, sunset colors, classical art">🖼️ Oil Paint</button>
+                        </div>
+                    </div>
+
+                    <label class="input-label"><span>🎨</span> Style</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-style="photorealistic">
+                            <div class="icon">📷</div>
+                            <h4>Photorealistic</h4>
+                            <p>Hyper-realistic images</p>
+                        </div>
+                        <div class="option-card" data-style="digital">
+                            <div class="icon">💻</div>
+                            <h4>Digital Art</h4>
+                            <p>Modern digital style</p>
+                        </div>
+                        <div class="option-card" data-style="anime">
+                            <div class="icon">🎭</div>
+                            <h4>Anime</h4>
+                            <p>Japanese animation</p>
+                        </div>
+                        <div class="option-card" data-style="3d">
+                            <div class="icon">🎮</div>
+                            <h4>3D Render</h4>
+                            <p>CGI style rendering</p>
+                        </div>
+                        <div class="option-card" data-style="abstract">
+                            <div class="icon">🔮</div>
+                            <h4>Abstract</h4>
+                            <p>Artistic abstraction</p>
+                        </div>
+                        <div class="option-card" data-style="vintage">
+                            <div class="icon">📷</div>
+                            <h4>Vintage</h4>
+                            <p>Retro aesthetics</p>
+                        </div>
+                    </div>
+
+                    <label class="input-label"><span>📐</span> Resolution</label>
+                    <div class="options-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="option-card" data-resolution="512x512"><h4>512×512</h4><p>Square</p></div>
+                        <div class="option-card selected" data-resolution="1024x1024"><h4>1024×1024</h4><p>Standard</p></div>
+                        <div class="option-card" data-resolution="1024x1792"><h4>1024×1792</h4><p>Portrait</p></div>
+                        <div class="option-card" data-resolution="1792x1024"><h4>1792×1024</h4><p>Landscape</p></div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Steps</span>
+                                <span class="setting-value" id="stepsValue">30</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="steps" min="10" max="50" value="30">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Guidance</span>
+                                <span class="setting-value" id="guidanceValue">7.5</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="guidance" min="1" max="15" value="7.5" step="0.5">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Variations</span>
+                                <span class="setting-value" id="variationsValue">1</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="variations" min="1" max="4" value="1">
+                        </div>
+                    </div>
+
+                    <button class="generate-btn" id="generateImageBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Image
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==================== VIDEO SECTION ==================== -->
+            <div class="tool-section" id="video-section">
+                <div class="creator-card">
                     <div class="upload-zone" id="uploadZone">
-                        <div class="upload-content" id="uploadContent">
-                            <div class="upload-icon">🖼️</div>
-                            <div class="upload-text">
-                                <h3>Drag & Drop gambar</h3>
-                                <p>atau klik untuk pilih file</p>
-                            </div>
+                        <div class="upload-content">
+                            <div class="upload-icon">🎬</div>
+                            <h3>Upload Image</h3>
+                            <p>Drag & drop or click to upload</p>
                             <div class="upload-formats">
                                 <span class="format-badge">JPG</span>
                                 <span class="format-badge">PNG</span>
                                 <span class="format-badge">WEBP</span>
                             </div>
                         </div>
-                        <div class="preview-container" id="previewContainer">
+                        <div class="preview-container">
                             <img id="previewImage" src="" alt="Preview">
                             <button class="remove-image" id="removeImage">✕</button>
                         </div>
                     </div>
                     <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp">
-                </div>
 
-                <!-- Text to Video -->
-                <div class="text-input-container">
-                    <div class="section-title" style="font-size: 1rem; margin-bottom: 15px;">
-                        <span class="icon" style="width: 30px; height: 30px; font-size: 14px;">✏️</span>
-                        Atau masukkan Prompt Video
+                    <div class="input-section">
+                        <label class="input-label"><span>✏️</span> Motion description</label>
+                        <textarea class="prompt-input" id="videoPrompt" 
+                            placeholder="A gentle zoom in effect, camera moving slowly, cinematic atmosphere..."></textarea>
                     </div>
-                    <textarea id="videoPrompt" placeholder="Contoh: A majestic lion walking through the savanna at sunset, cinematic lighting, 4K quality..."></textarea>
-                    <div class="char-count"><span id="videoCharCount">0</span>/500</div>
-                    
-                    <div class="prompt-templates">
-                        <h4>💡 Template Prompt:</h4>
-                        <div class="template-btns">
-                            <button class="template-btn" data-prompt="Cinematic nature documentary shot, aerial view of mountains with clouds">🌄 Landscape</button>
-                            <button class="template-btn" data-prompt="Dynamic action sequence, car chase through city streets at night, neon lights">🏙️ City Action</button>
-                            <button class="template-btn" data-prompt="Peaceful ocean waves hitting beach, golden hour lighting, slow motion">🌊 Ocean</button>
-                            <button class="template-btn" data-prompt="Futuristic robot working in laboratory, holographic displays">🤖 Sci-Fi</button>
+
+                    <label class="input-label"><span>🎥</span> Animation Style</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-animation="cinematic"><div class="icon">🎬</div><h4>Cinematic</h4><p>Professional film look</p></div>
+                        <div class="option-card" data-animation="zoom"><div class="icon">🔍</div><h4>Zoom Effect</h4><p>Dynamic zoom motion</p></div>
+                        <div class="option-card" data-animation="pan"><div class="icon">↔️</div><h4>Pan & Scan</h4><p>Camera panning</p></div>
+                        <div class="option-card" data-animation="kenburns"><div class="icon">🎥</div><h4>Ken Burns</h4><p>Classic documentary</p></div>
+                        <div class="option-card" data-animation="3d"><div class="icon">🎮</div><h4>3D Rotate</h4><p>3D perspective</p></div>
+                        <div class="option-card" data-animation="pulse"><div class="icon">💫</div><h4>Pulse Glow</h4><p>Breathing effect</p></div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Duration</span>
+                                <span class="setting-value" id="videoDurationValue">5s</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="videoDuration" min="3" max="10" value="5">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">FPS</span>
+                                <span class="setting-value" id="fpsValue">24</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="fps" min="15" max="60" value="24">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Quality</span>
+                                <span class="setting-value" id="qualityValue">HD</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="videoQuality" min="1" max="3" value="2">
                         </div>
                     </div>
-                </div>
 
-                <!-- Style Options -->
-                <div class="section-title">
-                    <span class="icon">✨</span>
-                    Pilih Gaya Video
+                    <button class="generate-btn" id="generateVideoBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Video
+                    </button>
                 </div>
-                <div class="style-options">
-                    <div class="style-card selected" data-style="cinematic">
-                        <div class="style-icon">🎥</div>
-                        <h4>Cinematic</h4>
-                        <p>Sinematik profesional</p>
-                    </div>
-                    <div class="style-card" data-style="realistic">
-                        <div class="style-icon">📷</div>
-                        <h4>Realistic</h4>
-                        <p>Hasil realistis</p>
-                    </div>
-                    <div class="style-card" data-style="anime">
-                        <div class="style-icon">🎨</div>
-                        <h4>Anime</h4>
-                        <p>Gaya animasi Jepang</p>
-                    </div>
-                    <div class="style-card" data-style="3d">
-                        <div class="style-icon">🎮</div>
-                        <h4>3D Render</h4>
-                        <p>Animasi 3D</p>
-                    </div>
-                    <div class="style-card" data-style="abstract">
-                        <div class="style-icon">🔮</div>
-                        <h4>Abstract</h4>
-                        <p>Seni abstrak</p>
-                    </div>
-                    <div class="style-card" data-style="vhs">
-                        <div class="style-icon">📼</div>
-                        <h4>VHS Retro</h4>
-                        <p>Gaya vintage</p>
-                    </div>
-                </div>
-
-                <!-- Aspect Ratio -->
-                <div class="section-title" style="font-size: 1rem;">
-                    <span class="icon" style="width: 30px; height: 30px; font-size: 14px;">📐</span>
-                    Aspect Ratio
-                </div>
-                <div class="aspect-ratio-options">
-                    <button class="aspect-btn selected" data-ratio="16:9">16:9 Landscape</button>
-                    <button class="aspect-btn" data-ratio="9:16">9:16 Portrait</button>
-                    <button class="aspect-btn" data-ratio="1:1">1:1 Square</button>
-                    <button class="aspect-btn" data-ratio="4:3">4:3 Classic</button>
-                </div>
-
-                <!-- Duration Setting -->
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Durasi</span>
-                            <span class="setting-value" id="durationValue">5 detik</span>
-                        </div>
-                        <input type="range" id="duration" min="3" max="10" value="5" step="1">
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Quality</span>
-                            <span class="setting-value" id="qualityValue">HD 1080p</span>
-                        </div>
-                        <input type="range" id="quality" min="1" max="3" value="2" step="1">
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Motion</span>
-                            <span class="setting-value" id="motionValue">70%</span>
-                        </div>
-                        <input type="range" id="motion" min="20" max="100" value="70" step="10">
-                    </div>
-                </div>
-
-                <button class="generate-btn" id="generateVideoBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Video dengan AI
-                </button>
             </div>
 
-            <!-- ==================== IMAGE TAB ==================== -->
-            <div class="tool-section" id="image-section">
-                <div class="section-title">
-                    <span class="icon">🖼️</span>
-                    AI Image Generator
-                </div>
-
-                <div class="text-input-container">
-                    <textarea id="imagePrompt" placeholder="Contoh: A beautiful sunset over the ocean, photorealistic, 8K resolution, dramatic clouds..."></textarea>
-                    <div class="char-count"><span id="imageCharCount">0</span>/1000</div>
-                    
-                    <div class="prompt-templates">
-                        <h4>💡 Template Prompt:</h4>
-                        <div class="template-btns">
-                            <button class="template-btn" data-prompt="Portrait of a woman, soft lighting, professional photography">👤 Portrait</button>
-                            <button class="template-btn" data-prompt="Fantasy castle on mountain top, sunset, epic landscape">🏰 Fantasy</button>
-                            <button class="template-btn" data-prompt="Minimalist product photography, white background, commercial">📦 Product</button>
-                            <button class="template-btn" data-prompt="Abstract geometric art, vibrant colors, modern design">🎨 Abstract</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section-title">
-                    <span class="icon">✨</span>
-                    Style
-                </div>
-                <div class="style-options">
-                    <div class="style-card selected" data-style="photorealistic">
-                        <div class="style-icon">📷</div>
-                        <h4>Photorealistic</h4>
-                        <p>Foto realistis</p>
-                    </div>
-                    <div class="style-card" data-style="digital-art">
-                        <div class="style-icon">💻</div>
-                        <h4>Digital Art</h4>
-                        <p>Seni digital</p>
-                    </div>
-                    <div class="style-card" data-style="oil-painting">
-                        <div class="style-icon">🖼️</div>
-                        <h4>Oil Painting</h4>
-                        <p>Lukisan minyak</p>
-                    </div>
-                    <div class="style-card" data-style="anime">
-                        <div class="style-icon">🎭</div>
-                        <h4>Anime</h4>
-                        <p>Style anime</p>
-                    </div>
-                    <div class="style-card" data-style="3d-render">
-                        <div class="style-icon">🎮</div>
-                        <h4>3D Render</h4>
-                        <p>Render 3D</p>
-                    </div>
-                    <div class="style-card" data-style="watercolor">
-                        <div class="style-icon">🌸</div>
-                        <h4>Watercolor</h4>
-                        <p>Cat air</p>
-                    </div>
-                </div>
-
-                <div class="section-title" style="font-size: 1rem;">
-                    <span class="icon" style="width: 30px; height: 30px; font-size: 14px;">📐</span>
-                    Resolution
-                </div>
-                <div class="aspect-ratio-options">
-                    <button class="aspect-btn selected" data-ratio="1024x1024">1024x1024</button>
-                    <button class="aspect-btn" data-ratio="1024x1792">1024x1792</button>
-                    <button class="aspect-btn" data-ratio="1792x1024">1792x1024</button>
-                    <button class="aspect-btn" data-ratio="512x512">512x512</button>
-                </div>
-
-                <button class="generate-btn" id="generateImageBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Gambar dengan AI
-                </button>
-            </div>
-
-            <!-- ==================== VOICE TAB ==================== -->
+            <!-- ==================== VOICE SECTION ==================== -->
             <div class="tool-section" id="voice-section">
-                <div class="section-title">
-                    <span class="icon">🎙️</span>
-                    AI Voice Generator
-                </div>
+                <div class="creator-card">
+                    <div class="input-section">
+                        <label class="input-label"><span>✏️</span> Text to speak</label>
+                        <textarea class="prompt-input" id="voicePrompt" 
+                            placeholder="Enter the text you want to convert to voice..." style="min-height: 150px;"></textarea>
+                    </div>
 
-                <div class="text-input-container">
-                    <textarea id="voicePrompt" placeholder="Masukkan teks yang ingin diubah menjadi suara..."></textarea>
-                    <div class="char-count"><span id="voiceCharCount">0</span>/2000</div>
-                </div>
+                    <label class="input-label"><span>🎤</span> Voice Selection</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-voice="andika"><div class="icon">👨</div><h4>Andika</h4><p>Indonesian Male</p></div>
+                        <div class="option-card" data-voice="ani"><div class="icon">👩</div><h4>Ani</h4><p>Indonesian Female</p></div>
+                        <div class="option-card" data-voice="david"><div class="icon">🧑</div><h4>David</h4><p>English Male</p></div>
+                        <div class="option-card" data-voice="sarah"><div class="icon">👱‍♀️</div><h4>Sarah</h4><p>English Female</p></div>
+                        <div class="option-card" data-voice="yuki"><div class="icon">👘</div><h4>Yuki</h4><p>Japanese Female</p></div>
+                        <div class="option-card" data-voice="amira"><div class="icon">🧕</div><h4>Amira</h4><p>Arabic Female</p></div>
+                    </div>
 
-                <div class="section-title">
-                    <span class="icon">🎤</span>
-                    Pilih Voice
-                </div>
-                <div class="voice-options">
-                    <div class="voice-card selected" data-voice="andi">
-                        <div class="voice-icon">👨</div>
-                        <h4>Andi</h4>
-                        <p>Pria Indonesia</p>
-                    </div>
-                    <div class="voice-card" data-voice="ani">
-                        <div class="voice-icon">👩</div>
-                        <h4>Ani</h4>
-                        <p>Wanita Indonesia</p>
-                    </div>
-                    <div class="voice-card" data-voice="david">
-                        <div class="voice-icon">🧑</div>
-                        <h4>David</h4>
-                        <p>Pria English</p>
-                    </div>
-                    <div class="voice-card" data-voice="sarah">
-                        <div class="voice-icon">👱‍♀️</div>
-                        <h4>Sarah</h4>
-                        <p>Wanita English</p>
-                    </div>
-                    <div class="voice-card" data-voice="japanese">
-                        <div class="voice-icon">👘</div>
-                        <h4>Yuki</h4>
-                        <p>Wanita Japan</p>
-                    </div>
-                    <div class="voice-card" data-voice="arabic">
-                        <div class="voice-icon">🧕</div>
-                        <h4>Amira</h4>
-                        <p>Wanita Arabic</p>
-                    </div>
-                </div>
-
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Speed</span>
-                            <span class="setting-value" id="speedValue">1.0x</span>
+                    <div class="settings-row">
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Speed</span>
+                                <span class="setting-value" id="voiceSpeedValue">1.0x</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="voiceSpeed" min="0.5" max="2" value="1" step="0.1">
                         </div>
-                        <input type="range" id="voiceSpeed" min="0.5" max="2" value="1" step="0.1">
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Pitch</span>
-                            <span class="setting-value" id="pitchValue">0</span>
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <span class="setting-label">Pitch</span>
+                                <span class="setting-value" id="pitchValue">0</span>
+                            </div>
+                            <input type="range" class="setting-slider" id="pitch" min="-10" max="10" value="0">
                         </div>
-                        <input type="range" id="voicePitch" min="-10" max="10" value="0" step="1">
                     </div>
-                </div>
 
-                <button class="generate-btn" id="generateVoiceBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Voice dengan AI
-                </button>
+                    <button class="generate-btn" id="generateVoiceBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Voice
+                    </button>
+                </div>
             </div>
 
-            <!-- ==================== MUSIC TAB ==================== -->
+            <!-- ==================== MUSIC SECTION ==================== -->
             <div class="tool-section" id="music-section">
-                <div class="section-title">
-                    <span class="icon">🎵</span>
-                    AI Music Generator
-                </div>
+                <div class="creator-card">
+                    <div class="input-section">
+                        <label class="input-label"><span>🎵</span> Music description</label>
+                        <textarea class="prompt-input" id="musicPrompt" 
+                            placeholder="Upbeat pop music, summer vibes, tropical beats, happy mood, 120 BPM..."></textarea>
+                    </div>
 
-                <div class="text-input-container">
-                    <textarea id="musicPrompt" placeholder="Contoh: Upbeat pop music, summer vibes, tropical beats, happy mood, 120 BPM..."></textarea>
-                    <div class="char-count"><span id="musicCharCount">0</span>/500</div>
-                    
-                    <div class="prompt-templates">
-                        <h4>💡 Template Prompt:</h4>
-                        <div class="template-btns">
-                            <button class="template-btn" data-prompt="Lo-fi hip hop, chill beats, study music, relaxed">🎹 Lo-Fi</button>
-                            <button class="template-btn" data-prompt="Epic orchestral soundtrack, cinematic, dramatic">🎻 Epic</button>
-                            <button class="template-btn" data-prompt="EDM drop, festival, high energy, electronic">🎧 EDM</button>
-                            <button class="template-btn" data-prompt="Acoustic guitar, singer songwriter, emotional">🎸 Acoustic</button>
-                        </div>
+                    <label class="input-label"><span>🎸</span> Genre</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-genre="pop"><div class="icon">🎤</div><h4>Pop</h4><p>Popular music</p></div>
+                        <div class="option-card" data-genre="electronic"><div class="icon">🎧</div><h4>Electronic</h4><p>EDM, Synth</p></div>
+                        <div class="option-card" data-genre="cinematic"><div class="icon">🎻</div><h4>Cinematic</h4><p>Orchestral</p></div>
+                        <div class="option-card" data-genre="ambient"><div class="icon">🌙</div><h4>Ambient</h4><p>Chill, Relaxing</p></div>
+                        <div class="option-card" data-genre="rock"><div class="icon">🎸</div><h4>Rock</h4><p>Guitar, Drums</p></div>
+                        <div class="option-card" data-genre="lofi"><div class="icon">🎹</div><h4>Lo-Fi</h4><p>Chill beats</p></div>
                     </div>
-                </div>
 
-                <div class="section-title">
-                    <span class="icon">🎸</span>
-                    Genre
+                    <button class="generate-btn" id="generateMusicBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Music
+                    </button>
                 </div>
-                <div class="style-options">
-                    <div class="style-card selected" data-style="pop">
-                        <div class="style-icon">🎤</div>
-                        <h4>Pop</h4>
-                        <p>Popular music</p>
-                    </div>
-                    <div class="style-card" data-style="electronic">
-                        <div class="style-icon">🎧</div>
-                        <h4>Electronic</h4>
-                        <p>EDM, Synth</p>
-                    </div>
-                    <div class="style-card" data-style="cinematic-music">
-                        <div class="style-icon">🎻</div>
-                        <h4>Cinematic</h4>
-                        <p>Orchestral</p>
-                    </div>
-                    <div class="style-card" data-style="ambient">
-                        <div class="style-icon">🌙</div>
-                        <h4>Ambient</h4>
-                        <p>Chill, Relaxing</p>
-                    </div>
-                    <div class="style-card" data-style="rock">
-                        <div class="style-icon">🎸</div>
-                        <h4>Rock</h4>
-                        <p>Guitar, Drums</p>
-                    </div>
-                    <div class="style-card" data-style="jazz">
-                        <div class="style-icon">🎷</div>
-                        <h4>Jazz</h4>
-                        <p>Smooth Jazz</p>
-                    </div>
-                </div>
-
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Duration</span>
-                            <span class="setting-value" id="musicDurationValue">30 detik</span>
-                        </div>
-                        <input type="range" id="musicDuration" min="10" max="120" value="30" step="10">
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Mood</span>
-                            <span class="setting-value" id="moodValue">Neutral</span>
-                        </div>
-                        <input type="range" id="mood" min="1" max="5" value="3" step="1">
-                    </div>
-                </div>
-
-                <button class="generate-btn" id="generateMusicBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Music dengan AI
-                </button>
             </div>
 
-            <!-- ==================== SHORTS TAB ==================== -->
+            <!-- ==================== SHORTS SECTION ==================== -->
             <div class="tool-section" id="shorts-section">
-                <div class="section-title">
-                    <span class="icon">📱</span>
-                    Auto Generate Viral Shorts
-                </div>
-                <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                    Buat video pendek viral untuk TikTok, Reels, dan YouTube Shorts secara otomatis dengan AI.
-                </p>
+                <div class="creator-card">
+                    <div class="input-section">
+                        <label class="input-label"><span>📱</span> Content idea</label>
+                        <textarea class="prompt-input" id="shortsPrompt" 
+                            placeholder="Quick healthy breakfast recipes under 5 minutes, engaging food content..."></textarea>
+                    </div>
 
-                <div class="script-section">
-                    <div class="script-header">
-                        <h4>📝 Auto Script & Narration</h4>
+                    <label class="input-label"><span>📐</span> Platform</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-platform="tiktok"><div class="icon">📱</div><h4>TikTok</h4><p>Vertical 9:16</p></div>
+                        <div class="option-card" data-platform="instagram"><div class="icon">📸</div><h4>Instagram</h4><p>Reels format</p></div>
+                        <div class="option-card" data-platform="youtube"><div class="icon">▶️</div><h4>YouTube</h4><p>Shorts format</p></div>
                     </div>
-                    <div class="script-options">
-                        <button class="script-btn active" data-script="auto">Auto Generate</button>
-                        <button class="script-btn" data-script="custom">Custom Script</button>
-                        <button class="script-btn" data-script="topic">From Topic</button>
-                    </div>
-                </div>
 
-                <div class="text-input-container">
-                    <textarea id="shortsPrompt" placeholder="Masukkan topik atau deskripsi video shorts yang ingin dibuat..."></textarea>
-                    <div class="char-count"><span id="shortsCharCount">0</span>/300</div>
-                    
-                    <div class="prompt-templates">
-                        <h4>💡 Topik Populer:</h4>
-                        <div class="template-btns">
-                            <button class="template-btn" data-prompt="Mind-blowing facts about space exploration">🚀 Space Facts</button>
-                            <button class="template-btn" data-prompt="Quick healthy breakfast recipes under 5 minutes">🍳 Breakfast</button>
-                            <button class="template-btn" data-prompt="Daily productivity tips for students">📚 Study Tips</button>
-                            <button class="template-btn" data-prompt="Amazing life hacks everyone should know">💡 Life Hacks</button>
-                        </div>
-                    </div>
+                    <button class="generate-btn" id="generateShortsBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Viral Short
+                    </button>
                 </div>
-
-                <div class="section-title">
-                    <span class="icon">📱</span>
-                    Platform Target
-                </div>
-                <div class="style-options">
-                    <div class="style-card selected" data-platform="tiktok">
-                        <div class="style-icon">📱</div>
-                        <h4>TikTok</h4>
-                        <p>Vertical 9:16</p>
-                    </div>
-                    <div class="style-card" data-platform="instagram">
-                        <div class="style-icon">📸</div>
-                        <h4>Instagram</h4>
-                        <p>Reels</p>
-                    </div>
-                    <div class="style-card" data-platform="youtube">
-                        <div class="style-icon">▶️</div>
-                        <h4>YouTube</h4>
-                        <p>Shorts</p>
-                    </div>
-                </div>
-
-                <button class="generate-btn" id="generateShortsBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Viral Short Otomatis
-                </button>
             </div>
 
-            <!-- ==================== CARTOON TAB ==================== -->
+            <!-- ==================== CARTOON SECTION ==================== -->
             <div class="tool-section" id="cartoon-section">
-                <div class="section-title">
-                    <span class="icon">👶</span>
-                    Auto Generate Kids Cartoons 3D
-                </div>
-                <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                    Buat cartoon 3D untuk anak-anak dengan narasi AI otomatis. Aman untuk YouTube Kids!
-                </p>
+                <div class="creator-card">
+                    <div class="input-section">
+                        <label class="input-label"><span>🎨</span> Story description</label>
+                        <textarea class="prompt-input" id="cartoonPrompt" 
+                            placeholder="Three friendly dinosaurs going on an adventure in a magical forest..."></textarea>
+                    </div>
 
-                <div class="text-input-container">
-                    <textarea id="cartoonPrompt" placeholder="Contoh: Three friendly dinosaurs going on an adventure in a magical forest..."></textarea>
-                    <div class="char-count"><span id="cartoonCharCount">0</span>/500</div>
-                </div>
+                    <label class="input-label"><span>🦕</span> Character</label>
+                    <div class="options-grid">
+                        <div class="option-card selected" data-char="dinosaurs"><div class="icon">🦕</div><h4>Dinosaurs</h4><p>Friendly reptiles</p></div>
+                        <div class="option-card" data-char="unicorns"><div class="icon">🦄</div><h4>Unicorns</h4><p>Magical horses</p></div>
+                        <div class="option-card" data-char="animals"><div class="icon">🐻</div><h4>Animals</h4><p>Cute creatures</p></div>
+                        <div class="option-card" data-char="robots"><div class="icon">🤖</div><h4>Robots</h4><p>Future friends</p></div>
+                    </div>
 
-                <div class="section-title">
-                    <span class="icon">🎭</span>
-                    Karakter
+                    <button class="generate-btn" id="generateCartoonBtn" disabled>
+                        <span class="sparkle">✨</span>
+                        Generate Kids Cartoon
+                    </button>
                 </div>
-                <div class="cartoon-options">
-                    <div class="cartoon-card selected" data-char="dinosaurs">
-                        <div class="cartoon-icon">🦕</div>
-                        <h4>Dinosaurs</h4>
-                    </div>
-                    <div class="cartoon-card" data-char="unicorns">
-                        <div class="cartoon-icon">🦄</div>
-                        <h4>Unicorns</h4>
-                    </div>
-                    <div class="cartoon-card" data-char="animals">
-                        <div class="cartoon-icon">🐻</div>
-                        <h4>Animals</h4>
-                    </div>
-                    <div class="cartoon-card" data-char="robots">
-                        <div class="cartoon-icon">🤖</div>
-                        <h4>Robots</h4>
-                    </div>
-                </div>
-
-                <div class="section-title">
-                    <span class="icon">🎬</span>
-                    Tema Cerita
-                </div>
-                <div class="style-options">
-                    <div class="style-card selected" data-theme="adventure">
-                        <div class="style-icon">🏔️</div>
-                        <h4>Adventure</h4>
-                        <p>Petualangan</p>
-                    </div>
-                    <div class="style-card" data-theme="friendship">
-                        <div class="style-icon">💕</div>
-                        <h4>Friendship</h4>
-                        <p>Persahabatan</p>
-                    </div>
-                    <div class="style-card" data-theme="learning">
-                        <div class="style-icon">📖</div>
-                        <h4>Learning</h4>
-                        <p>Educatif</p>
-                    </div>
-                    <div class="style-card" data-theme="fun">
-                        <div class="style-icon">🎉</div>
-                        <h4>Fun</h4>
-                        <p>Hiburan</p>
-                    </div>
-                </div>
-
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Durasi</span>
-                            <span class="setting-value" id="cartoonDurationValue">1 menit</span>
-                        </div>
-                        <input type="range" id="cartoonDuration" min="30" max="180" value="60" step="30">
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <span>Episode</span>
-                            <span class="setting-value" id="episodeValue">1 Episode</span>
-                        </div>
-                        <input type="range" id="episode" min="1" max="5" value="1" step="1">
-                    </div>
-                </div>
-
-                <button class="generate-btn" id="generateCartoonBtn" disabled>
-                    <span class="sparkle">✨</span>
-                    Generate Kids Cartoon 3D
-                </button>
             </div>
-        </div>
 
-        <!-- Result Section -->
-        <div class="result-section" id="resultSection">
-            <div class="result-card">
+            <!-- Result Section -->
+            <div class="result-section" id="resultSection">
                 <div class="result-header">
-                    <h3>
-                        <span>🎉</span>
-                        <span id="resultTitle">Hasil Generate</span>
-                    </h3>
-                    <span class="result-badge" id="resultBadge">Complete</span>
+                    <h3>✨ <span id="resultTitle">Generated Result</span></h3>
+                    <span class="result-badge">Complete</span>
                 </div>
                 <div class="result-preview" id="resultPreview">
                     <img id="resultImage" src="" alt="Result" style="display: none;">
-                    <video id="resultVideoElement" controls style="display: none;">
-                        <source src="" type="video/mp4">
-                    </video>
-                    <audio id="resultAudio" controls style="display: none;">
-                        <source src="" type="audio/mpeg">
-                    </audio>
-                    <div id="resultPlaceholder" style="text-align: center; color: var(--text-secondary);">
-                        <div style="font-size: 60px; margin-bottom: 15px;">✨</div>
-                        <p>Hasil akan muncul di sini</p>
-                    </div>
+                    <video id="resultVideo" controls style="display: none;"><source src="" type="video/mp4"></video>
+                    <audio id="resultAudio" controls style="display: none;"><source src="" type="audio/mpeg"></audio>
                 </div>
                 <div class="action-buttons">
-                    <button class="action-btn primary" id="downloadBtn">
-                        <span>⬇️</span> Download
-                    </button>
-                    <button class="action-btn secondary" id="regenerateBtn">
-                        <span>🔄</span> Regenerate
-                    </button>
-                    <button class="action-btn secondary" id="shareBtn">
-                        <span>📤</span> Share
-                    </button>
+                    <button class="action-btn primary" id="downloadBtn"><span>⬇️</span> Download</button>
+                    <button class="action-btn secondary" id="shareBtn"><span>📤</span> Share</button>
+                    <button class="action-btn secondary" id="regenerateBtn"><span>🔄</span> Regenerate</button>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Processing Overlay -->
     <div class="processing-overlay" id="processingOverlay">
-        <div class="processing-content">
-            <div class="processing-animation">
-                <div class="processing-circle"></div>
-                <div class="processing-circle"></div>
-                <div class="processing-circle"></div>
-            </div>
-            <div class="processing-text" id="processingText">AI Sedang Memproses...</div>
-            <div class="processing-status" id="processingStatus">Mohon tunggu...</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <button class="cancel-btn" id="cancelBtn">Batalkan</button>
+        <div class="processing-animation">
+            <div class="processing-ring"></div>
+            <div class="processing-ring"></div>
+            <div class="processing-ring"></div>
         </div>
+        <div class="processing-text" id="processingText">Generating...</div>
+        <div class="processing-status" id="processingStatus">Please wait</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <button class="cancel-btn" id="cancelBtn">Cancel</button>
     </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">
         <span class="toast-icon">✅</span>
-        <span class="toast-message">Operasi berhasil!</span>
+        <span class="toast-message">Success!</span>
     </div>
 
-    <footer>
-        <p>Powered by <a href="https://slendro-ai.com" target="_blank">Slendro AI</a> | Slendro-Chip v1.2 | © 2026</p>
-    </footer>
-
     <script>
-        // DOM Elements
-        const uploadZone = document.getElementById('uploadZone');
-        const uploadContent = document.getElementById('uploadContent');
-        const previewContainer = document.getElementById('previewContainer');
-        const previewImage = document.getElementById('previewImage');
-        const fileInput = document.getElementById('fileInput');
-        const removeImageBtn = document.getElementById('removeImage');
-        const processingOverlay = document.getElementById('processingOverlay');
-        const progressFill = document.getElementById('progressFill');
-        const resultSection = document.getElementById('resultSection');
-        const toast = document.getElementById('toast');
-
-        // State
         let selectedFile = null;
-        let currentTab = 'video';
+        let currentTab = 'image';
         let processing = false;
-        let currentResultType = 'image';
+        let ollamaConnected = false;
+        let currentOllamaUrl = 'http://localhost:11434';
 
-        // Tab Navigation
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                const tabName = tab.dataset.tab;
-                currentTab = tabName;
-                
-                document.querySelectorAll('.tool-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById(`${tabName}-section`).classList.add('active');
-                
-                checkGenerateButton();
+        const pageTitles = {
+            image: { title: 'Image Generator', desc: 'Create stunning AI-powered images from text descriptions' },
+            video: { title: 'Video Generator', desc: 'Transform images into dynamic video animations' },
+            voice: { title: 'Voice Clone', desc: 'Convert text to natural speech with AI voices' },
+            music: { title: 'Music AI', desc: 'Generate original music with AI' },
+            shorts: { title: 'Viral Shorts', desc: 'Create engaging short-form content' },
+            cartoon: { title: 'Kids Cartoon', desc: 'Generate fun 3D cartoon animations' }
+        };
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tab = item.dataset.tab;
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`${tab}-section`).classList.add('active');
+                currentTab = tab;
+                document.getElementById('pageTitle').textContent = pageTitles[tab].title;
+                document.getElementById('pageDescription').textContent = pageTitles[tab].desc;
             });
         });
 
-        // File Upload
-        uploadZone.addEventListener('click', () => {
-            if (!selectedFile) fileInput.click();
+        document.getElementById('aiProvider').addEventListener('change', (e) => {
+            document.getElementById('ollamaUrl').style.display = e.target.value === 'ollama' ? 'block' : 'none';
         });
 
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('dragover');
-        });
+        function connectToAI() {
+            const provider = document.getElementById('aiProvider').value;
+            const statusDot = document.getElementById('apiStatusDot');
+            const statusText = document.getElementById('apiStatusText');
+            const providerName = document.getElementById('apiProviderName');
+            const connectBtn = document.getElementById('connectApiBtn');
 
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('dragover');
-        });
+            if (provider === 'demo') {
+                statusDot.className = 'status-dot online';
+                statusText.textContent = 'Online';
+                providerName.textContent = 'Demo Mode Active';
+                ollamaConnected = true;
+                connectBtn.textContent = 'Connected';
+                showToast('Demo mode activated', 'success');
+                return;
+            }
 
+            if (provider === 'ollama') {
+                currentOllamaUrl = document.getElementById('ollamaUrl').value;
+                connectBtn.textContent = 'Connecting...';
+                fetch(`${currentOllamaUrl}/api/tags`)
+                    .then(res => {
+                        if (res.ok) {
+                            statusDot.className = 'status-dot online';
+                            statusText.textContent = 'Online';
+                            providerName.textContent = 'Ollama Connected';
+                            ollamaConnected = true;
+                            connectBtn.textContent = 'Connected';
+                            showToast('Connected to Ollama', 'success');
+                        } else { throw new Error('Connection failed'); }
+                    })
+                    .catch(() => {
+                        statusDot.className = 'status-dot offline';
+                        statusText.textContent = 'Offline';
+                        providerName.textContent = 'Connection failed';
+                        connectBtn.textContent = 'Retry';
+                        showToast('Cannot connect to Ollama', 'error');
+                    });
+            } else if (provider === 'huggingface') {
+                statusDot.className = 'status-dot online';
+                statusText.textContent = 'Online';
+                providerName.textContent = 'Hugging Face Ready';
+                ollamaConnected = true;
+                connectBtn.textContent = 'Connected';
+                showToast('Hugging Face mode ready', 'success');
+            }
+        }
+
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const removeImageBtn = document.getElementById('removeImage');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
         uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadZone.classList.remove('dragover');
             const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                handleFile(file);
-            }
+            if (file?.type.startsWith('image/')) handleFile(file);
         });
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) handleFile(file);
-        });
-
-        removeImageBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            resetUpload();
-        });
+        fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+        removeImageBtn.addEventListener('click', (e) => { e.stopPropagation(); resetUpload(); });
 
         function handleFile(file) {
             selectedFile = file;
@@ -1898,8 +1023,8 @@
             reader.onload = (e) => {
                 previewImage.src = e.target.result;
                 uploadZone.classList.add('has-image');
-                checkGenerateButton();
-                showToast('Gambar berhasil diupload!', 'success');
+                checkGenerateButtons();
+                showToast('Image uploaded', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -1909,137 +1034,48 @@
             fileInput.value = '';
             previewImage.src = '';
             uploadZone.classList.remove('has-image');
-            checkGenerateButton();
+            checkGenerateButtons();
         }
 
-        // Character count
-        const textareas = ['videoPrompt', 'imagePrompt', 'voicePrompt', 'musicPrompt', 'shortsPrompt', 'cartoonPrompt'];
-        textareas.forEach(id => {
-            const textarea = document.getElementById(id);
-            const charCount = document.getElementById(id.replace('Prompt', 'CharCount'));
-            
-            textarea.addEventListener('input', () => {
-                charCount.textContent = textarea.value.length;
-                checkGenerateButton();
-            });
+        document.querySelectorAll('.prompt-input').forEach(textarea => {
+            textarea.addEventListener('input', checkGenerateButtons);
         });
 
-        // Template buttons
-        document.querySelectorAll('.template-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const prompt = btn.dataset.prompt;
-                const currentSection = document.querySelector('.tool-section.active');
+        function checkGenerateButtons() {
+            const currentSection = document.getElementById(`${currentTab}-section`);
+            const textarea = currentSection.querySelector('textarea');
+            const btn = currentSection.querySelector('.generate-btn');
+            if (btn) {
+                const hasText = textarea?.value.trim().length > 0;
+                const hasFile = selectedFile !== null;
+                btn.disabled = !(hasText || hasFile);
+            }
+        }
+
+        document.querySelectorAll('.template-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const prompt = chip.dataset.prompt;
+                const currentSection = document.getElementById(`${currentTab}-section`);
                 const textarea = currentSection.querySelector('textarea');
-                if (textarea) {
-                    textarea.value = prompt;
-                    textarea.dispatchEvent(new Event('input'));
-                }
+                if (textarea) { textarea.value = prompt; checkGenerateButtons(); }
             });
         });
 
-        // Style cards
-        document.querySelectorAll('.style-card').forEach(card => {
+        document.querySelectorAll('.option-card').forEach(card => {
             card.addEventListener('click', () => {
-                const parent = card.closest('.style-options') || card.closest('.voice-options');
-                parent.querySelectorAll('.style-card, .voice-card').forEach(c => c.classList.remove('selected'));
+                const parent = card.closest('.options-grid') || card.parentElement;
+                parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
             });
         });
 
-        // Model cards
-        document.querySelectorAll('.model-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
+        document.querySelectorAll('.setting-slider').forEach(slider => {
+            slider.addEventListener('input', () => {
+                const valueEl = document.getElementById(`${slider.id}Value`);
+                if (valueEl) valueEl.textContent = slider.value;
             });
         });
 
-        // Voice cards
-        document.querySelectorAll('.voice-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.voice-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-            });
-        });
-
-        // Cartoon cards
-        document.querySelectorAll('.cartoon-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.cartoon-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-            });
-        });
-
-        // Aspect ratio buttons
-        document.querySelectorAll('.aspect-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                btn.closest('.aspect-ratio-options').querySelectorAll('.aspect-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-            });
-        });
-
-        // Script buttons
-        document.querySelectorAll('.script-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.script-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        // Sliders
-        document.getElementById('duration')?.addEventListener('input', (e) => {
-            document.getElementById('durationValue').textContent = `${e.target.value} detik`;
-        });
-
-        document.getElementById('quality')?.addEventListener('input', (e) => {
-            const qualities = ['SD 480p', 'HD 720p', 'HD 1080p'];
-            document.getElementById('qualityValue').textContent = qualities[e.target.value - 1];
-        });
-
-        document.getElementById('motion')?.addEventListener('input', (e) => {
-            document.getElementById('motionValue').textContent = `${e.target.value}%`;
-        });
-
-        document.getElementById('voiceSpeed')?.addEventListener('input', (e) => {
-            document.getElementById('speedValue').textContent = `${parseFloat(e.target.value).toFixed(1)}x`;
-        });
-
-        document.getElementById('voicePitch')?.addEventListener('input', (e) => {
-            document.getElementById('pitchValue').textContent = e.target.value;
-        });
-
-        document.getElementById('musicDuration')?.addEventListener('input', (e) => {
-            document.getElementById('musicDurationValue').textContent = `${e.target.value} detik`;
-        });
-
-        document.getElementById('mood')?.addEventListener('input', (e) => {
-            const moods = ['Dark', 'Sad', 'Neutral', 'Happy', 'Epic'];
-            document.getElementById('moodValue').textContent = moods[e.target.value - 1];
-        });
-
-        document.getElementById('cartoonDuration')?.addEventListener('input', (e) => {
-            document.getElementById('cartoonDurationValue').textContent = `${e.target.value / 60} menit`;
-        });
-
-        document.getElementById('episode')?.addEventListener('input', (e) => {
-            document.getElementById('episodeValue').textContent = `${e.target.value} Episode`;
-        });
-
-        // Check generate button state
-        function checkGenerateButton() {
-            const activeSection = document.querySelector('.tool-section.active');
-            const textarea = activeSection?.querySelector('textarea');
-            const generateBtn = activeSection?.querySelector('.generate-btn');
-            
-            if (!generateBtn) return;
-            
-            const hasText = textarea && textarea.value.trim().length > 0;
-            const hasFile = selectedFile !== null;
-            
-            generateBtn.disabled = !(hasText || hasFile);
-        }
-
-        // Generate Buttons
         document.querySelectorAll('.generate-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const sectionId = btn.closest('.tool-section').id;
@@ -2049,360 +1085,116 @@
 
         function startGeneration(sectionId) {
             if (processing) return;
-            
             processing = true;
-            processingOverlay.classList.add('active');
-            
+            document.getElementById('processingOverlay').classList.add('active');
+
             const titles = {
-                'video-section': 'Video',
-                'image-section': 'Gambar',
-                'voice-section': 'Voice',
-                'music-section': 'Music',
-                'shorts-section': 'Shorts',
-                'cartoon-section': 'Cartoon'
+                'image-section': 'Generating Image',
+                'video-section': 'Generating Video',
+                'voice-section': 'Generating Voice',
+                'music-section': 'Generating Music',
+                'shorts-section': 'Creating Short',
+                'cartoon-section': 'Creating Cartoon'
             };
 
             const statuses = {
-                'video-section': ['Mengupload file...', 'Menganalisis input...', 'Processing dengan AI...', 'Rendering video...', 'Finalisasi...'],
-                'image-section': ['Menggenerate...', 'Processing...', 'Enhancing detail...', 'Finalisasi...'],
-                'voice-section': ['Text to Speech...', 'Processing voice...', 'Enhancing audio...', 'Finalisasi...'],
-                'music-section': ['Composing music...', 'Generating melody...', 'Mixing audio...', 'Finalisasi...'],
-                'shorts-section': ['Generating script...', 'Creating scenes...', 'Adding narration...', 'Editing...', 'Finalisasi...'],
-                'cartoon-section': ['Creating characters...', 'Building 3D scenes...', 'Animating...', 'Adding sound...', 'Finalisasi...']
+                'image-section': ['Analyzing prompt...', 'Loading model...', 'Generating pixels...', 'Finalizing...'],
+                'video-section': ['Processing image...', 'Applying motion...', 'Rendering frames...', 'Encoding...'],
+                'voice-section': ['Processing text...', 'Synthesizing voice...', 'Finalizing audio...'],
+                'music-section': ['Composing melody...', 'Arranging instruments...', 'Mixing...'],
+                'shorts-section': ['Generating script...', 'Creating scenes...', 'Adding transitions...', 'Finalizing...'],
+                'cartoon-section': ['Creating characters...', 'Building scenes...', 'Animating...', 'Rendering...']
             };
 
-            let stepIndex = 0;
-            const steps = statuses[sectionId] || statuses['video-section'];
-            
-            document.getElementById('processingText').textContent = `Generating ${titles[sectionId]}...`;
-            
+            document.getElementById('processingText').textContent = titles[sectionId] + '...';
+            let step = 0;
+            const steps = statuses[sectionId] || statuses['image-section'];
+
             const interval = setInterval(() => {
-                if (!processing) {
-                    clearInterval(interval);
-                    return;
-                }
-                
-                if (stepIndex < steps.length) {
-                    document.getElementById('processingStatus').textContent = steps[stepIndex];
-                    progressFill.style.width = ((stepIndex + 1) / steps.length * 100) + '%';
-                    stepIndex++;
+                if (!processing) { clearInterval(interval); return; }
+                if (step < steps.length) {
+                    document.getElementById('processingStatus').textContent = steps[step];
+                    document.getElementById('progressFill').style.width = ((step + 1) / steps.length * 100) + '%';
+                    step++;
                 } else {
                     clearInterval(interval);
                     completeGeneration(sectionId);
                 }
-            }, 1200);
+            }, 1000);
         }
 
         function completeGeneration(sectionId) {
             processing = false;
-            processingOverlay.classList.remove('active');
-            
-            // Show result based on section
-            resultSection.classList.add('active');
-            
-            const titles = {
-                'video-section': 'Video Berhasil Dihasilkan!',
-                'image-section': 'Gambar Berhasil Dihasilkan!',
-                'voice-section': 'Voice Berhasil Dihasilkan!',
-                'music-section': 'Music Berhasil Dihasilkan!',
-                'shorts-section': 'Shorts Viral Berhasil!',
-                'cartoon-section': 'Kids Cartoon 3D Selesai!'
-            };
+            document.getElementById('processingOverlay').classList.remove('active');
+            document.getElementById('resultSection').classList.add('active');
 
-            document.getElementById('resultTitle').textContent = titles[sectionId];
-            
-            // Show preview
-            const preview = document.getElementById('resultPreview');
-            const placeholder = document.getElementById('resultPlaceholder');
+            const resultTitle = document.getElementById('resultTitle');
             const resultImage = document.getElementById('resultImage');
-            const resultVideo = document.getElementById('resultVideoElement');
+            const resultVideo = document.getElementById('resultVideo');
             const resultAudio = document.getElementById('resultAudio');
-            
-            // Hide all first
-            placeholder.style.display = 'none';
+
             resultImage.style.display = 'none';
             resultVideo.style.display = 'none';
             resultAudio.style.display = 'none';
-            
-            if (sectionId === 'video-section' || sectionId === 'shorts-section' || sectionId === 'cartoon-section') {
-                resultVideo.style.display = 'block';
-                // Use uploaded image or placeholder as video poster
-                if (selectedFile) {
-                    resultVideo.poster = previewImage.src;
-                }
-            } else if (sectionId === 'voice-section' || sectionId === 'music-section') {
-                resultAudio.style.display = 'block';
-            } else {
+
+            if (sectionId === 'image-section' || sectionId === 'cartoon-section' || sectionId === 'shorts-section') {
                 resultImage.style.display = 'block';
-                resultImage.src = selectedFile ? previewImage.src : 'https://picsum.photos/1024/1024?' + Date.now();
+                resultImage.src = selectedFile ? previewImage.src : `https://picsum.photos/1024/1024?random=${Date.now()}`;
+                resultTitle.textContent = 'Image Generated';
+            } else if (sectionId === 'video-section') {
+                resultVideo.style.display = 'block';
+                if (selectedFile) resultVideo.poster = previewImage.src;
+                resultTitle.textContent = 'Video Generated';
+            } else {
+                resultAudio.style.display = 'block';
+                resultTitle.textContent = 'Audio Generated';
             }
-            
-            showToast('✨ Berhasil! Hasil siap didownload', 'success');
+            showToast('Generation complete!', 'success');
         }
 
         document.getElementById('cancelBtn').addEventListener('click', () => {
             processing = false;
-            processingOverlay.classList.remove('active');
-            showToast('Proses dibatalkan', 'error');
+            document.getElementById('processingOverlay').classList.remove('active');
+            showToast('Cancelled', 'error');
         });
 
-        // Action buttons
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const resultImage = document.getElementById('resultImage');
-            const resultVideo = document.getElementById('resultVideoElement');
-            const resultAudio = document.getElementById('resultAudio');
-            
             if (resultImage.style.display !== 'none') {
                 const link = document.createElement('a');
                 link.href = resultImage.src;
-                link.download = `slendro-ai-${Date.now()}.jpg`;
+                link.download = `ai-generated-${Date.now()}.jpg`;
                 link.click();
-            } else if (resultVideo.style.display !== 'none') {
-                const link = document.createElement('a');
-                link.href = resultVideo.poster || previewImage.src;
-                link.download = `slendro-video-${Date.now()}.jpg`;
-                link.click();
+                showToast('Download started', 'success');
             }
-            
-            showToast('Download dimulai!', 'success');
-        });
-
-        document.getElementById('regenerateBtn').addEventListener('click', () => {
-            resultSection.classList.remove('active');
-            resetUpload();
-            document.querySelectorAll('textarea').forEach(t => t.value = '');
-            document.querySelectorAll('.char-count').forEach(c => c.textContent = '0');
-            showToast('Siap generate ulang!', 'success');
         });
 
         document.getElementById('shareBtn').addEventListener('click', () => {
             if (navigator.share) {
-                navigator.share({
-                    title: 'Slendro AI Studio',
-                    text: 'Lihat hasil AI yang saya buat dengan Slendro AI!',
-                    url: window.location.href
-                });
+                navigator.share({ title: 'AI Studio Pro', text: 'Check out what I created!', url: window.location.href });
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                showToast('Link berhasil disalin!', 'success');
+                showToast('Link copied!', 'success');
             }
         });
 
-        // Toast
+        document.getElementById('regenerateBtn').addEventListener('click', () => {
+            document.getElementById('resultSection').classList.remove('active');
+            resetUpload();
+            document.querySelectorAll('textarea').forEach(t => t.value = '');
+            checkGenerateButtons();
+            showToast('Ready for new generation', 'success');
+        });
+
         function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
             toast.querySelector('.toast-message').textContent = message;
             toast.querySelector('.toast-icon').textContent = type === 'success' ? '✅' : '❌';
             toast.className = `toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Initialize
-        checkGenerateButton();
-
-        // ==================== OLLAMA AI INTEGRATION ====================
-        
-        let ollamaConnected = false;
-        let currentOllamaUrl = 'http://localhost:11434';
-        let availableModels = [];
-
-        // Connect to Ollama
-        async function connectToAI() {
-            const provider = document.getElementById('aiProvider').value;
-            const connectBtn = document.getElementById('connectApiBtn');
-            const statusDot = document.getElementById('apiStatusDot');
-            const statusText = document.getElementById('apiStatusText');
-
-            if (provider === 'demo') {
-                statusDot.className = 'api-status-dot online';
-                statusText.textContent = 'Demo Mode';
-                ollamaConnected = true;
-                showToast('Demo Mode aktif - tanpa API', 'success');
-                return;
-            }
-
-            if (provider === 'ollama') {
-                currentOllamaUrl = document.getElementById('ollamaUrl').value;
-                connectBtn.disabled = true;
-                connectBtn.textContent = '⏳ Connecting...';
-                statusDot.className = 'api-status-dot loading';
-                statusText.textContent = 'Connecting...';
-
-                try {
-                    const response = await fetch(`${currentOllamaUrl}/api/tags`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        availableModels = data.models || [];
-                        ollamaConnected = true;
-                        statusDot.className = 'api-status-dot online';
-                        statusText.textContent = `Connected (${availableModels.length} models)`;
-                        connectBtn.textContent = '✓ Connected';
-                        connectBtn.disabled = false;
-                        
-                        // Update model dropdown
-                        updateModelDropdown();
-                        showToast(`Terhubung ke Ollama! ${availableModels.length} model tersedia`, 'success');
-                    } else {
-                        throw new Error('Connection failed');
-                    }
-                } catch (error) {
-                    ollamaConnected = false;
-                    statusDot.className = 'api-status-dot offline';
-                    statusText.textContent = 'Connection Failed';
-                    connectBtn.textContent = '🔗 Retry Connect';
-                    connectBtn.disabled = false;
-                    showToast('Tidak dapat terhubung ke Ollama. Pastikan Ollama berjalan.', 'error');
-                }
-            } else if (provider === 'huggingface') {
-                statusDot.className = 'api-status-dot online';
-                statusText.textContent = 'Hugging Face API';
-                ollamaConnected = true;
-                connectBtn.textContent = '✓ Ready';
-                showToast('Hugging Face API mode - perlu API key', 'success');
-            }
-        }
-
-        function updateModelDropdown() {
-            const modelSelect = document.getElementById('aiModel');
-            const currentValue = modelSelect.value;
-            modelSelect.innerHTML = '';
-            
-            if (availableModels.length === 0) {
-                modelSelect.innerHTML = '<option value="llava">LLaVA</option><option value="llama3">Llama 3</option><option value="mistral">Mistral</option>';
-            } else {
-                availableModels.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.name;
-                    option.textContent = model.name;
-                    modelSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Generate Image with Ollama/HuggingFace
-        async function generateWithAI(sectionId) {
-            const provider = document.getElementById('aiProvider').value;
-            const model = document.getElementById('aiModel').value;
-            const prompt = document.querySelector(`#${sectionId} textarea`)?.value || '';
-
-            if (!prompt && !selectedFile) {
-                showToast('Masukkan prompt atau upload gambar!', 'error');
-                return false;
-            }
-
-            if (provider === 'demo') {
-                return false; // Use mock generation
-            }
-
-            processing = true;
-            processingOverlay.classList.add('active');
-            document.getElementById('processingText').textContent = 'AI Generating...';
-            
-            try {
-                if (provider === 'ollama') {
-                    if (selectedFile) {
-                        // Image-to-image with Ollama
-                        const base64Image = previewImage.src.split(',')[1];
-                        const response = await fetch(`${currentOllamaUrl}/api/generate`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                model: model,
-                                prompt: prompt || 'Enhance this image with better lighting and details',
-                                images: [base64Image]
-                            })
-                        });
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            processing = false;
-                            processingOverlay.classList.remove('active');
-                            return { success: true, response: data };
-                        }
-                    } else {
-                        // Text-to-image - use Ollama for description
-                        const response = await fetch(`${currentOllamaUrl}/api/generate`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                model: model,
-                                prompt: `Generate a detailed image description for: ${prompt}`
-                            })
-                        });
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            // For now, return the description - real implementation would use image model
-                            processing = false;
-                            processingOverlay.classList.remove('active');
-                            showToast('Ollama response: ' + data.response?.substring(0, 50) + '...', 'success');
-                            return { success: true, response: data };
-                        }
-                    }
-                } else if (provider === 'huggingface') {
-                    // HuggingFace Inference API
-                    const hfToken = localStorage.getItem('hf_token') || prompt('Enter HuggingFace API Token:');
-                    if (hfToken) {
-                        localStorage.setItem('hf_token', hfToken);
-                        
-                        const response = await fetch(
-                            `https://api-inference.huggingface.co/models/${model}`,
-                            {
-                                method: 'POST',
-                                headers: { 
-                                    'Authorization': `Bearer ${hfToken}`,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ inputs: prompt })
-                            }
-                        );
-                        
-                        if (response.ok) {
-                            const blob = await response.blob();
-                            const url = URL.createObjectURL(blob);
-                            processing = false;
-                            processingOverlay.classList.remove('active');
-                            return { success: true, imageUrl: url };
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('AI Generation Error:', error);
-                showToast('Error: ' + error.message, 'error');
-            }
-            
-            processing = false;
-            processingOverlay.classList.remove('active');
-            return { success: false };
-        }
-
-        // Override startGeneration to use AI
-        const originalStartGeneration = startGeneration;
-        startGeneration = async function(sectionId) {
-            const provider = document.getElementById('aiProvider').value;
-            
-            // Only use AI for image/video sections
-            if ((sectionId === 'image-section' || sectionId === 'video-section') && ollamaConnected && provider !== 'demo') {
-                const result = await generateWithAI(sectionId);
-                if (result.success) {
-                    resultSection.classList.add('active');
-                    document.getElementById('resultTitle').textContent = 
-                        sectionId === 'image-section' ? 'Gambar AI Berhasil!' : 'Video AI Berhasil!';
-                    
-                    if (result.imageUrl) {
-                        document.getElementById('resultImage').src = result.imageUrl;
-                        document.getElementById('resultImage').style.display = 'block';
-                    }
-                    showToast('✨ Hasil AI berhasil dibuat!', 'success');
-                    return;
-                }
-            }
-            
-            // Fall back to original mock generation
-            originalStartGeneration(sectionId);
-        };
+        checkGenerateButtons();
     </script>
 </body>
 </html>
