@@ -1,5 +1,7 @@
 # AI Studio 🎨
 
+![AI Studio Banner](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800)
+
 AI-powered creative studio for generating and editing content.
 
 ## ✨ Features
